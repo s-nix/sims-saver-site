@@ -1,0 +1,16 @@
+{
+  "version": "v0.3.6",
+  "date": "2026-09-14T20:55:16Z",
+  "url": "https://sims-saver.nix.uno/",
+  "notes": "",
+  "assets": {
+    "sims-saver-0.3.6-1.x86_64.rpm": {"url": "https://sims-saver.nix.uno/releases/v0.3.6/sims-saver-0.3.6-1.x86_64.rpm", "sha256": "9d79331afdc0cb7ba256e2a106663392f4cc16fdc76c18365614c655b2d70a11"},
+    "sims-saver_0.3.6_amd64.deb": {"url": "https://sims-saver.nix.uno/releases/v0.3.6/sims-saver_0.3.6_amd64.deb", "sha256": "3b394c455374c4c11f21dbe84f1501264d54bd2babf2e3d4ab7d775676915f7a"},
+    "sims-saver_0.3.6_linux_amd64.flatpak": {"url": "https://sims-saver.nix.uno/releases/v0.3.6/sims-saver_0.3.6_linux_amd64.flatpak", "sha256": "0643e6464fa8f0f7b30f29e360d256c72474528815e031ee10da2ecb7af19c3e"},
+    "sims-saver_0.3.6_linux_amd64.tar.gz": {"url": "https://sims-saver.nix.uno/releases/v0.3.6/sims-saver_0.3.6_linux_amd64.tar.gz", "sha256": "77597c2e151fbb24655605ede9351f087270f2146fc86503946808802101c2fe"},
+    "sims-saver_0.3.6_macos_universal.dmg": {"url": "https://sims-saver.nix.uno/releases/v0.3.6/sims-saver_0.3.6_macos_universal.dmg", "sha256": "19e014a38b4b1cf3d2b3dd207cbc01ea5fc50710ce10f78f3f3a3519171e1366"},
+    "sims-saver_0.3.6_windows_amd64_setup.exe": {"url": "https://sims-saver.nix.uno/releases/v0.3.6/sims-saver_0.3.6_windows_amd64_setup.exe", "sha256": "6b6c7a715beb596f23d3aaabf89ab000d6dae4641269180d542075129fb818a4"},
+    "sims-saver_linux_amd64": {"url": "https://sims-saver.nix.uno/releases/v0.3.6/sims-saver_linux_amd64", "sha256": "c544f16a073e8158a7ce462010e2e8d7ea5f7a225d50860dac97c282292dc46a"},
+    "sims-saver_windows_amd64.exe": {"url": "https://sims-saver.nix.uno/releases/v0.3.6/sims-saver_windows_amd64.exe", "sha256": "fe2e03e7a05d5858b2e494e8d3d81a5e120a4f1cd8e186a71323800e9424d12e"}
+  }
+}

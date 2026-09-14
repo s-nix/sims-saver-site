@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sims Saver</title>
+<meta name="description" content="Backs up and syncs your Sims 3 and Sims 4 saves between your computers, using storage you control.">
+<link rel="icon" href="favicon-32.png" sizes="32x32">
+<link rel="icon" href="icon.png" sizes="256x256">
+<link rel="apple-touch-icon" href="icon.png">
+<meta property="og:title" content="Sims Saver">
+<meta property="og:description" content="Your Sims. On Every Computer.">
+<meta property="og:image" content="https://sims-saver.nix.uno/icon.png">
+<style>
+  :root { color-scheme: light dark;
+    --lgreen:#7ED957; --green:#00B894; --blue:#3B82F6; --navy:#1F2937; --grey:#E5E7EB; --purple:#6366F1;
+    --bg:#ffffff; --bg2:#f3f5f8; --surface:#ffffff; --fg:#1F2937; --muted:#6B7280; --border:#E5E7EB; --radius:14px; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#0f1621; --bg2:#151d2a; --surface:#1F2937; --fg:#E5E7EB; --muted:#9CA3AF; --border:#364152; } }
+  * { box-sizing:border-box; }
+  body { margin:0; font: 16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; background:var(--bg); color:var(--fg); }
+  a { color: var(--green); }
+  /* File names and commands have no natural break points; let them wrap
+     anywhere rather than push the page sideways on phones. */
+  a, code { overflow-wrap: anywhere; }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 1.25rem; }
+
+  nav { display:flex; align-items:center; gap:1.5rem; padding:1rem 0; }
+  .brand { display:flex; align-items:center; gap:.6rem; text-decoration:none; color:inherit; }
+  .brand img { width:34px; height:34px; }
+  .brand b { font-weight:800; letter-spacing:-.01em; }
+  .brand b span { color:var(--green); }
+  nav .links { display:flex; gap:1.25rem; margin-left:.5rem; font-size:.95rem; }
+  nav .links a { color:var(--muted); text-decoration:none; }
+  nav .links a:hover { color:var(--fg); }
+  nav .spacer { flex:1; }
+  .btn { display:inline-flex; align-items:center; gap:.5rem; padding:.7rem 1.2rem; border-radius:999px; background:var(--green); color:#fff; font-weight:600; text-decoration:none; border:2px solid var(--green); white-space:nowrap; }
+  .btn.outline { background:transparent; color:var(--green); }
+  .btn.small { padding:.45rem .95rem; font-size:.9rem; }
+
+  .hero { display:grid; grid-template-columns: 1.1fr .9fr; gap:2rem; align-items:center; padding: 2.5rem 0 3rem; }
+  .hero h1 { font-size: clamp(2.2rem, 5vw, 3.4rem); line-height:1.08; margin:0 0 1rem; font-weight:800; letter-spacing:-.02em; }
+  .hero h1 .a { color:var(--fg); } .hero h1 .b { color:var(--green); }
+  .hero p { font-size:1.1rem; color:var(--muted); max-width:46ch; margin:0 0 1.5rem; }
+  .hero .actions { display:flex; gap:.75rem; flex-wrap:wrap; }
+  .art { position:relative; aspect-ratio: 1; border-radius: 28px; overflow:hidden;
+         background: radial-gradient(120% 100% at 30% 20%, #dff8ef 0%, #cfe9ff 55%, #eef3ff 100%); display:grid; place-items:center; }
+  @media (prefers-color-scheme: dark) { .art { background: radial-gradient(120% 100% at 30% 20%, #17322b 0%, #16263f 55%, #1a2234 100%); } }
+  .art img { width:62%; filter: drop-shadow(0 18px 30px rgba(0,0,0,.18)); }
+  .art::after { content:""; position:absolute; inset:auto -10% -35% -10%; height:60%; background: var(--surface); border-radius:50%; opacity:.9; }
+
+  h2 { font-size:1.5rem; margin: 2.5rem 0 1rem; letter-spacing:-.01em; }
+  .features { display:grid; grid-template-columns: 1fr 1fr; gap:1.25rem; align-items:stretch; }
+  .flist { display:flex; flex-direction:column; gap:1.1rem; }
+  .feat { display:flex; gap:1rem; align-items:flex-start; }
+  .feat .ic { flex:0 0 52px; width:52px; height:52px; border-radius:50%; display:grid; place-items:center; color:#fff; }
+  .ic.g { background:var(--green); } .ic.b { background:var(--blue); } .ic.p { background:var(--purple); }
+  .feat b { display:block; font-size:1.05rem; margin-bottom:.15rem; }
+  .feat span { color:var(--muted); font-size:.95rem; }
+  .tag { border-radius: 24px; padding:1.5rem; display:flex; flex-direction:column; justify-content:space-between; min-height:320px;
+         background: linear-gradient(160deg, #1F2937 0%, #0f1621 100%); color:#fff; position:relative; overflow:hidden; }
+  .tag img { width:120px; align-self:center; margin-top:.5rem; filter: drop-shadow(0 12px 24px rgba(0,0,0,.35)); }
+  .tag .line { font: italic 700 1.9rem/1.15 Georgia, "Times New Roman", serif; letter-spacing:-.01em; }
+  .tag .line small { display:block; font: 400 .9rem/1.4 system-ui,sans-serif; opacity:.75; margin-top:.5rem; }
+
+  .card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:1.1rem 1.25rem; }
+  table { width:100%; border-collapse:collapse; font-size:.95rem; }
+  td, th { text-align:left; padding:.55rem .4rem; border-bottom:1px solid var(--border); vertical-align:top; }
+  th { color:var(--muted); font-weight:500; }
+  code, pre { font-family: ui-monospace,SFMono-Regular,Menlo,monospace; font-size:.88em; }
+  code { background:var(--bg2); padding:.1em .35em; border-radius:4px; }
+  pre { background:var(--bg2); padding:.8rem 1rem; border-radius:10px; overflow:auto; margin:.4rem 0 1rem; border:1px solid var(--border); }
+  .cmd { position:relative; }
+  .cmd pre { padding-right:6rem; margin:.4rem 0 1rem; }
+  .cmd .copy { position:absolute; top:.45rem; right:.5rem; padding:.35rem .7rem; border-radius:999px; border:1px solid var(--border); background:var(--surface); color:var(--fg); font:inherit; font-size:.8rem; cursor:pointer; }
+  .cmd .copy:hover { border-color:var(--green); color:var(--green); }
+  .cmd .copy.done { background:var(--green); border-color:var(--green); color:#fff; }
+  .muted { color:var(--muted); } .small { font-size:.9rem; }
+  .steps { padding-left:1.2rem; } .steps li { margin:.35rem 0; }
+  footer { margin: 3.5rem 0 2rem; color:var(--muted); font-size:.85rem; display:flex; gap:1rem; flex-wrap:wrap; align-items:center; }
+  @media (max-width: 760px) {
+    .hero, .features { grid-template-columns:1fr; }
+    nav .links { display:none; }
+    .art { max-width:360px; margin:0 auto; }
+    .card { padding:1rem; }
+    /* Commands wrap instead of scrolling under the copy button, which
+       moves below them. */
+    .cmd pre { padding-right:1rem; white-space:pre-wrap; margin-bottom:.4rem; }
+    .cmd .copy { position:static; display:block; margin:0 0 1rem auto; }
+    /* The download table becomes a stacked list: platform, file, note. */
+    #downloads, #downloads tbody, #downloads tr, #downloads td { display:block; width:100%; }
+    #downloads tr:first-child { display:none; }
+    #downloads tr { padding:.7rem 0; border-bottom:1px solid var(--border); }
+    #downloads tr:last-child { border-bottom:0; }
+    #downloads td { padding:.1rem 0; border:0; }
+    #downloads td:first-child { font-weight:600; }
+    #downloads td.muted { font-size:.9rem; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav>
+    <a class="brand" href="#"><img src="logo.svg" alt=""><b>Sims <span>Saver</span></b></a>
+    <div class="links"><a href="#features">Features</a><a href="#download">Download</a><a href="#invite">Invite codes</a><a href="#how">How it works</a></div>
+    <div class="spacer"></div>
+    <a class="btn small" href="#download">Download</a>
+  </nav>
+
+  <section class="hero">
+    <div>
+      <h1><span class="a">Your Sims.</span><br><span class="b">On Every Computer.</span></h1>
+      <p>Sims Saver backs up your Sims 3 and Sims 4 saves to storage you control and keeps each of your computers up to date. It runs in the tray.</p>
+      <div class="actions">
+        <a class="btn" id="hero-dl" href="#download">Download</a>
+        <a class="btn outline" href="#features">Learn more</a>
+      </div>
+      <p class="small muted" style="margin-top:1rem">Version <span id="ver">v0.3.6</span> · <span id="date">2026-09-14</span> · Windows, macOS, Linux, Steam Deck</p>
+    </div>
+    <div class="art"><img src="logo.svg" alt=""></div>
+  </section>
+
+  <h2 id="features">What it does</h2>
+  <section class="features">
+    <div class="flist">
+      <div class="feat"><div class="ic g"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19a4.5 4.5 0 0 0 .5-8.97A7 7 0 0 0 4.7 12.4 3.5 3.5 0 0 0 6 19z"/><path d="M12 12v6m-3-3 3-3 3 3"/></svg></div><div><b>Syncs after every save</b><span>A few seconds after the game saves, the file is uploaded. Your other computers get it within a minute.</span></div></div>
+      <div class="feat"><div class="ic b"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 12h4m-2-2v4m7-1h.01M18 11h.01"/><path d="M7.5 6h9a5 5 0 0 1 4.9 6l-1.1 5.5a2.5 2.5 0 0 1-4.3 1.1L14.5 17h-5l-1.5 1.6a2.5 2.5 0 0 1-4.3-1.1L2.6 12A5 5 0 0 1 7.5 6z"/></svg></div><div><b>Sims 3 and Sims 4</b><span>Finds the game folders itself, including Steam and Proton installs on Linux and Steam Deck.</span></div></div>
+      <div class="feat"><div class="ic p"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg></div><div><b>Version history</b><span>Keeps the last ten versions of each save and thirty days of deleted files, and can put a whole folder back to an earlier day.</span></div></div>
+    </div>
+    <div class="tag">
+      <img src="logo.svg" alt="">
+      <div class="line">Same Stories.<br>New Devices.<small>Works with your own storage, or a friend's through an invite code.</small></div>
+    </div>
+  </section>
+
+  <h2 id="download">Download</h2>
+  <div class="card">
+    <table id="downloads">
+      <tr><th>Platform</th><th>File</th><th>Notes</th></tr>
+    </table>
+    <p class="small muted" style="margin:.8rem 0 0">SHA-256 sums: <a id="sums" href="#">checksums.txt</a>. The macOS app is signed with a Developer ID and notarized by Apple, so it opens like any other download.</p>
+  </div>
+
+  <h2>One-line install</h2>
+  <p class="small muted">Downloads the latest version, checks it against the published hash, installs it and starts it.</p>
+  <div class="card">
+    <div class="small"><strong>Linux and macOS.</strong> Paste into a terminal.</div>
+    <div class="cmd"><pre><code>curl -fsSL https://sims-saver.nix.uno/install.sh | sh</code></pre><button class="copy" type="button" aria-label="Copy command">Copy</button></div>
+    <div class="small"><strong>Windows.</strong> Paste into PowerShell.</div>
+    <div class="cmd"><pre><code>irm https://sims-saver.nix.uno/install.ps1 | iex</code></pre><button class="copy" type="button" aria-label="Copy command">Copy</button></div>
+    <div class="small muted">Installs for your user only, so there is no sudo or admin prompt. On Linux, <code>--system</code> installs the .deb or .rpm through your package manager instead, and <code>--flatpak</code> installs the Flatpak (the default on Steam Deck).</div>
+  </div>
+
+  <h2 id="invite">Have an invite code?</h2>
+  <div class="card">
+    <p>If someone is hosting storage for you, they will give you a code that starts with <code>SIMS1-</code>.</p>
+    <ol class="steps small">
+      <li>Install the app.</li>
+      <li>Name your computer and check the Sims folder it found.</li>
+      <li>On the Storage step, paste the code into "Have a code from a friend?" and click Use code.</li>
+      <li>Click Start syncing.</li>
+    </ol>
+  </div>
+
+  <h2 id="how">How it works</h2>
+  <div class="card small">
+    <p>Sims Saver watches your Sims folders. When the game writes a save, the app waits a few seconds for it to finish, then uploads it. Your other computers check for changes about once a minute and download what is new.</p>
+    <p>If two computers change the same save before they have synced, neither copy is thrown away. The newer one keeps its name and the older one is saved next to it as a "conflict from" copy, which shows up in the game as a separate save. You can pick one in the app's Conflicts tab or just leave both.</p>
+    <p>Storage can be S3-compatible (Backblaze B2, Cloudflare R2, Wasabi and others), WebDAV or Nextcloud, SFTP, a network share, Google Drive, Dropbox, OneDrive, or a plain folder. You can set a passphrase so that files are encrypted before upload; then the storage host cannot read them, and neither can you without the passphrase.</p>
+  </div>
+
+  <footer><img src="logo.svg" alt="" width="20" height="20"> MIT licence. Not affiliated with Electronic Arts. The Sims is a trademark of Electronic Arts Inc.</footer>
+</div>
+<script>
+// Copy buttons for the one-liners. Falls back to selecting the text where
+// the clipboard API is unavailable (plain http, old browsers).
+for (const btn of document.querySelectorAll('.cmd .copy')) {
+  btn.addEventListener('click', async () => {
+    const code = btn.parentElement.querySelector('code');
+    const text = code.textContent.trim();
+    let ok = false;
+    try { await navigator.clipboard.writeText(text); ok = true; } catch {}
+    if (!ok) {
+      const range = document.createRange(); range.selectNodeContents(code);
+      const sel = getSelection(); sel.removeAllRanges(); sel.addRange(range);
+      try { ok = document.execCommand('copy'); } catch {}
+    }
+    btn.textContent = ok ? 'Copied' : 'Select & copy';
+    btn.classList.toggle('done', ok);
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('done'); }, 1800);
+  });
+}
+(async () => {
+  let latest;
+  try { latest = await (await fetch('latest.json', { cache: 'no-store' })).json(); } catch { return; }
+  const v = latest.version.replace(/^v/, '');
+  document.getElementById('ver').textContent = latest.version;
+  document.getElementById('date').textContent = new Date(latest.date).toLocaleDateString(undefined, { dateStyle: 'medium' });
+  const base = 'releases/' + latest.version + '/';
+  document.getElementById('sums').href = base + 'checksums.txt';
+  const rows = [
+    ['Windows', `sims-saver_${v}_windows_amd64_setup.exe`, 'Installer (per-user, no admin needed)'],
+    ['macOS', `sims-saver_${v}_macos_universal.dmg`, 'Universal (Apple Silicon and Intel)'],
+    ['Debian / Ubuntu', `sims-saver_${v}_amd64.deb`, 'sudo apt install ./sims-saver_*.deb'],
+    ['Fedora / openSUSE', `sims-saver-${v}-1.x86_64.rpm`, 'sudo dnf install ./sims-saver-*.rpm'],
+    ['Steam Deck / Flatpak', `sims-saver_${v}_linux_amd64.flatpak`, 'flatpak install --user ./sims-saver_*.flatpak'],
+    ['Any Linux', `sims-saver_${v}_linux_amd64.tar.gz`, 'Needs libwebkit2gtk-4.1 and GTK 3'],
+  ];
+  const table = document.getElementById('downloads');
+  for (const [plat, file, note] of rows) {
+    if (!latest.assets[file]) continue;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${plat}</td><td><a href="${base}${file}">${file}</a></td><td class="muted">${note}</td>`;
+    table.appendChild(tr);
+  }
+  const ua = navigator.userAgent, plat = navigator.platform || '';
+  let pick = null;
+  if (/Windows/i.test(ua)) pick = rows[0];
+  else if (/Mac/i.test(plat)) pick = rows[1];
+  else if (/Linux|X11/i.test(ua)) pick = rows[5];
+  const dl = document.getElementById('hero-dl');
+  if (pick && latest.assets[pick[1]]) { dl.textContent = 'Download for ' + pick[0]; dl.href = base + pick[1]; }
+})();
+</script>
+</body>
+</html>
